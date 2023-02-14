@@ -1,0 +1,77 @@
+<ul ngbNav [(activeId)]="activeId" class="nav-pills">
+  <li [ngbNavItem]="1" (click)="onModeChange()">
+    <a ngbNavLink>User</a>
+  </li>
+  <li [ngbNavItem]="2" (click)="onModeChange()">
+    <a ngbNavLink>Group</a>
+  </li>
+  <li [ngbNavItem]="3" (click)="onModeChange()">
+    <a ngbNavLink>User Access</a>
+  </li>
+</ul>
+
+<button class="btn" (click)="changeMode()">
+  {{ isEditMode ? 'Change To View Mode' : 'Change To Edit Mode' }}
+</button>
+
+<button *ngIf="isEditMode" class="submit" (click)="save()" [disabled]="saveBtnDisabled()"> Save </button>
+
+<table class="table table-striped">
+  <thead>
+    <tr *ngIf="_columnDefinition">
+      <th *ngIf="isEditMode"><button (click)="addRecord()">Add</button></th>
+      <th *ngFor="let column of _columnDefinition">
+        <div *ngIf="!isEditMode">
+          <!--Show Input box if it can be filter-->
+          <div *ngIf="column.filterable">
+            <input type="text" placeholder="{{ column.columnHeader }}" (input)="inputChange($event, column)"
+              name="{{ column.columnId }}" [(ngModel)]="column.ngValue" value="{{ column.ngValue}}" />
+          </div>
+          <!--Show Label if it can't be filter-->
+          <div *ngIf="!column.filterable ">
+            {{ column.columnHeader }}
+          </div>
+        </div>
+
+        <div *ngIf="isEditMode">
+          {{ column.columnHeader }}
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody *ngIf="!isEditMode">
+    <tr *ngFor="let item of _tableViewData">
+      <td>{{ item.userId }}</td>
+      <td>{{ item.firstName }}</td>
+      <td>{{ item.lastName }}</td>
+      <td>{{ item.loginName }}</td>
+      <td>{{ item.password | maskPassword }}</td>
+      <td>{{ item.email }}</td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="isEditMode">
+    <tr *ngFor="let item of _data">
+      <td><button (click)="deleteRecord(item)">delete</button></td>
+      <td>
+
+        <input type="text" value="{{ item.userId }}" [(ngModel)]="item.userId" *ngIf="item.newRecord" />
+        <span *ngIf="!item.newRecord">{{ item.userId }}</span>
+      </td>
+      <td>
+        <input type="text" value="{{ item.firstName }}" [(ngModel)]="item.firstName" />
+      </td>
+      <td>
+        <input type="text" value="{{ item.lastName }}" [(ngModel)]="item.lastName" />
+      </td>
+      <td>
+        <input type="text" value="{{ item.loginName }}" [(ngModel)]="item.loginName" />
+      </td>
+      <td>
+        <input type="password" value="{{ item.password }}" [(ngModel)]="item.password" />
+      </td>
+      <td>
+        <input type="text" value="{{ item.email }}" [(ngModel)]="item.email" />
+      </td>
+    </tr>
+  </tbody>
+</table>
