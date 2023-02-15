@@ -1,12 +1,21 @@
-<ul ngbNav [(activeId)]="activeId" class="nav-pills">
-  <li [ngbNavItem]="1" (click)="onModeChange()">
+<!--Nav Bar-->
+<ul
+  ngbNav
+  [(activeId)]="activeId"
+  (navChange)="onTabChange($event)"
+  (activeIdChange)="onActiveIdChange()"
+  class="nav-pills"
+  justify-content="center"
+  align-items="center"
+>
+  <li [ngbNavItem]="1">
     <a ngbNavLink>User</a>
   </li>
-  <li [ngbNavItem]="2" (click)="onModeChange()">
-    <a ngbNavLink>Group</a>
-  </li>
-  <li [ngbNavItem]="3" (click)="onModeChange()">
+  <li [ngbNavItem]="2">
     <a ngbNavLink>User Access</a>
+  </li>
+  <li [ngbNavItem]="3">
+    <a ngbNavLink>Group</a>
   </li>
 </ul>
 
@@ -14,21 +23,36 @@
   {{ isEditMode ? 'Change To View Mode' : 'Change To Edit Mode' }}
 </button>
 
-<button *ngIf="isEditMode" class="submit" (click)="save()" [disabled]="saveBtnDisabled()"> Save </button>
+<button
+  *ngIf="isEditMode"
+  class="submit"
+  (click)="save()"
+  [disabled]="saveBtnDisabled()"
+>
+  Save
+</button>
 
+<!--Table-->
 <table class="table table-striped">
   <thead>
+    <!--Header-->
     <tr *ngIf="_columnDefinition">
       <th *ngIf="isEditMode"><button (click)="addRecord()">Add</button></th>
       <th *ngFor="let column of _columnDefinition">
         <div *ngIf="!isEditMode">
           <!--Show Input box if it can be filter-->
           <div *ngIf="column.filterable">
-            <input type="text" placeholder="{{ column.columnHeader }}" (input)="inputChange($event, column)"
-              name="{{ column.columnId }}" [(ngModel)]="column.ngValue" value="{{ column.ngValue}}" />
+            <input
+              type="text"
+              placeholder="{{ column.columnHeader }}"
+              (input)="inputChange($event, column)"
+              name="{{ column.columnId }}"
+              [(ngModel)]="column.ngValue"
+              value="{{ column.ngValue }}"
+            />
           </div>
           <!--Show Label if it can't be filter-->
-          <div *ngIf="!column.filterable ">
+          <div *ngIf="!column.filterable">
             {{ column.columnHeader }}
           </div>
         </div>
@@ -39,7 +63,9 @@
       </th>
     </tr>
   </thead>
-  <tbody *ngIf="!isEditMode">
+  <!--Body-->
+  <tbody *ngIf="!isEditMode && _viewSelected == 1">
+    <!--User-->
     <tr *ngFor="let item of _tableViewData">
       <td>{{ item.userId }}</td>
       <td>{{ item.firstName }}</td>
@@ -49,29 +75,135 @@
       <td>{{ item.email }}</td>
     </tr>
   </tbody>
-  <tbody *ngIf="isEditMode">
-    <tr *ngFor="let item of _data">
-      <td><button (click)="deleteRecord(item)">delete</button></td>
+  <tbody *ngIf="!isEditMode && _viewSelected == 2">
+    <!--User Access-->
+    <tr *ngFor="let item of _tableViewData">
+      <td>{{ item.userId }}</td>
+      <td>{{ item.groupId }}</td>
+      <td>{{ item.dateOfRelationshipCreation | date: 'yyyy-MM-dd' }}</td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="!isEditMode && _viewSelected == 3">
+    <!--Group-->
+    <tr *ngFor="let item of _tableViewData">
+      <td>{{ item.groupId }}</td>
+      <td>{{ item.groupName }}</td>
+      <td>{{ item.description }}</td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="isEditMode && _viewSelected == 1">
+    <!--User-->
+    <tr *ngFor="let editItem of _tableViewData">
+      <td><button (click)="deleteRecord(editItem)">delete</button></td>
       <td>
-
-        <input type="text" value="{{ item.userId }}" [(ngModel)]="item.userId" *ngIf="item.newRecord" />
-        <span *ngIf="!item.newRecord">{{ item.userId }}</span>
+        <input
+          *ngIf="editItem.newRecord"
+          type="text"
+          value="{{ editItem.userId }}"
+          [(ngModel)]="editItem.userId"
+          (focusout)="onInputUserIdleave(editItem.userId)"
+        />
+        <span *ngIf="!editItem.newRecord">{{ editItem.userId }}</span>
       </td>
       <td>
-        <input type="text" value="{{ item.firstName }}" [(ngModel)]="item.firstName" />
+        <input
+          type="text"
+          value="{{ editItem.firstName }}"
+          [(ngModel)]="editItem.firstName"
+        />
       </td>
       <td>
-        <input type="text" value="{{ item.lastName }}" [(ngModel)]="item.lastName" />
+        <input
+          type="text"
+          value="{{ editItem.lastName }}"
+          [(ngModel)]="editItem.lastName"
+        />
       </td>
       <td>
-        <input type="text" value="{{ item.loginName }}" [(ngModel)]="item.loginName" />
+        <input
+          type="text"
+          value="{{ editItem.loginName }}"
+          [(ngModel)]="editItem.loginName"
+        />
       </td>
       <td>
-        <input type="password" value="{{ item.password }}" [(ngModel)]="item.password" />
+        <input
+          type="password"
+          value="{{ editItem.password }}"
+          [(ngModel)]="editItem.password"
+        />
       </td>
       <td>
-        <input type="text" value="{{ item.email }}" [(ngModel)]="item.email" />
+        <input
+          type="text"
+          value="{{ editItem.email }}"
+          [(ngModel)]="editItem.email"
+        />
+      </td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="isEditMode && _viewSelected == 2">
+    <!--User Access-->
+    <tr *ngFor="let editItem of _tableViewData">
+      <td><button (click)="deleteRecord(editItem)">delete</button></td>
+      <td>
+        <select
+          value="{{ editItem.userId }}"
+          [(ngModel)]="editItem.userId"
+          (change)="onInputUserAccessleave(editItem)"
+        >
+          <option *ngFor="let user of _userData">
+            {{ user.userId }}
+          </option>
+        </select>
+      </td>
+      <td>
+        <select
+          value="{{ editItem.groupId }}"
+          [(ngModel)]="editItem.groupId"
+          (change)="onInputUserAccessleave(editItem)"
+        >
+          <option *ngFor="let group of _groupData">
+            {{ group.groupId }}
+          </option>
+        </select>
+      </td>
+      <td>
+        {{ editItem.dateOfRelationshipCreation | date: 'yyyy-MM-dd' }}
+      </td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="isEditMode && _viewSelected == 3">
+    <!--Group-->
+    <tr *ngFor="let editItem of _tableViewData">
+      <td><button (click)="deleteRecord(editItem)">delete</button></td>
+      <td>
+        <input
+          *ngIf="editItem.newRecord"
+          type="text"
+          value="{{ editItem.groupId }}"
+          [(ngModel)]="editItem.groupId"
+          (focusout)="onInputGroupIdleave(editItem.groupId)"
+        />
+        <span *ngIf="!editItem.newRecord">{{ editItem.groupId }}</span>
+      </td>
+      <td>
+        <input
+          type="text"
+          value="{{ editItem.groupName }}"
+          [(ngModel)]="editItem.groupName"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          value="{{ editItem.description }}"
+          [(ngModel)]="editItem.description"
+        />
       </td>
     </tr>
   </tbody>
 </table>
+
+<!--Dialog-->
+<app-dialog></app-dialog>

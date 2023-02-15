@@ -1,19 +1,7 @@
 export enum TabId {
   User = 1,
-  Group = 2,
-  UserGroup = 3,
-}
-
-export interface Group {
-  groupId: string;
-  groupName: string;
-  description: string;
-}
-
-export interface UserAccess {
-  userId: string;
-  groupId: string;
-  dateOfRelationshipCreation: string;
+  UserAccess = 2,
+  Group = 3,
 }
 
 export const columnDefinition: any[] = [
@@ -23,7 +11,7 @@ export const columnDefinition: any[] = [
     columnHeader: 'User Id',
     columnDataAlias: '',
     filterable: true,
-    ngValue: ''
+    ngValue: '',
   },
   {
     tabId: TabId.User,
@@ -31,7 +19,7 @@ export const columnDefinition: any[] = [
     columnHeader: 'First Name',
     columnDataAlias: '',
     filterable: true,
-    ngValue: ''
+    ngValue: '',
   },
   {
     tabId: TabId.User,
@@ -39,7 +27,7 @@ export const columnDefinition: any[] = [
     columnHeader: 'Last Name',
     columnDataAlias: '',
     filterable: true,
-    ngValue: ''
+    ngValue: '',
   },
   {
     tabId: TabId.User,
@@ -47,7 +35,7 @@ export const columnDefinition: any[] = [
     columnHeader: 'Login Name',
     columnDataAlias: '',
     filterable: true,
-    ngValue: ''
+    ngValue: '',
   },
   {
     tabId: TabId.User,
@@ -55,7 +43,7 @@ export const columnDefinition: any[] = [
     columnHeader: 'Password',
     columnDataAlias: '',
     filterable: false,
-    ngValue: ''
+    ngValue: '',
   },
   {
     tabId: TabId.User,
@@ -63,6 +51,54 @@ export const columnDefinition: any[] = [
     columnHeader: 'Email',
     columnDataAlias: '',
     filterable: true,
-    ngValue: ''
+    ngValue: '',
+  },
+  {
+    tabId: TabId.UserAccess,
+    columnId: 'userId',
+    columnHeader: 'User Id',
+    columnDataAlias: '',
+    filterable: true,
+    ngValue: '',
+  },
+  {
+    tabId: TabId.UserAccess,
+    columnId: 'groupId',
+    columnHeader: 'Group Id',
+    columnDataAlias: '',
+    filterable: true,
+    ngValue: '',
+  },
+  {
+    tabId: TabId.UserAccess,
+    columnId: 'dateOfRelationshipCreation',
+    columnHeader: 'Date of Relationship Creation',
+    columnDataAlias: '',
+    filterable: true,
+    ngValue: '',
+  },
+  {
+    tabId: TabId.Group,
+    columnId: 'groupId',
+    columnHeader: 'Group Id',
+    columnDataAlias: '',
+    filterable: true,
+    ngValue: '',
+  },
+  {
+    tabId: TabId.Group,
+    columnId: 'groupName',
+    columnHeader: 'Group Name',
+    columnDataAlias: '',
+    filterable: true,
+    ngValue: '',
+  },
+  {
+    tabId: TabId.Group,
+    columnId: 'description',
+    columnHeader: 'Description',
+    columnDataAlias: '',
+    filterable: true,
+    ngValue: '',
   },
 ];

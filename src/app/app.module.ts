@@ -7,6 +7,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppTableComponent } from './app-table/app-table.component';
 import { MaskPasswordPipe } from './mask-password.pipe';
+import { DialogComponent } from './dialog/dialog.component';
+import { DialogService } from './dialog/dialog.service';
 
 @NgModule({
   imports: [
@@ -16,7 +18,13 @@ import { MaskPasswordPipe } from './mask-password.pipe';
     FormsModule,
     RouterModule.forRoot([{ path: '', component: AppTableComponent }]),
   ],
-  declarations: [AppComponent, AppTableComponent, MaskPasswordPipe],
+  providers: [DialogService],
+  declarations: [
+    AppComponent,
+    AppTableComponent,
+    MaskPasswordPipe,
+    DialogComponent,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

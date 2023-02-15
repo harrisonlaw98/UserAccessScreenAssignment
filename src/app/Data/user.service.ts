@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from './User';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class UserService {
       loginName: 'tonywong',
       password: '1234567',
       email: 'tonywong@gmail.com',
-      newRecord: false
+      newRecord: false,
     },
     {
       userId: 'wewe',
@@ -22,7 +22,7 @@ export class UserService {
       loginName: 'benpong',
       password: '1234567',
       email: 'benpong@gmail.com',
-      newRecord: false
+      newRecord: false,
     },
     {
       userId: 'rere',
@@ -31,7 +31,7 @@ export class UserService {
       loginName: 'peterchan',
       password: '1234567',
       email: 'peterchan@gmail.com',
-      newRecord: false
+      newRecord: false,
     },
     {
       userId: 'qqq',
@@ -40,7 +40,7 @@ export class UserService {
       loginName: 'sandypui',
       password: '1234567',
       email: 'sandypui@gmail.com',
-      newRecord: false
+      newRecord: false,
     },
     {
       userId: 'zxcc',
@@ -49,27 +49,26 @@ export class UserService {
       loginName: 'kenyi',
       password: '1234567',
       email: 'kenyi@gmail.com',
-      newRecord: false
+      newRecord: false,
     },
   ];
 
   getUser() {
-    return this.user;
+    return JSON.parse(JSON.stringify(this.user));
   }
 
   updateUser(users: User[]) {
-    this.user = users.map(user => { user.newRecord = false; return user; });
+    this.user = users.map((user) => {
+      user.newRecord = false;
+      return user;
+    });
   }
 
   deleteUser(deleteUser: User) {
-    this.user = this.user.filter(v => v.userId != deleteUser.userId);
+    this.user = this.user.filter((v) => v.userId != deleteUser.userId);
   }
 
   vaildate(users: User[]) {
-
-    this.user.forEach((user: User) => {
-
-
-    })
+    this.user.forEach((user: User) => {});
   }
 }
